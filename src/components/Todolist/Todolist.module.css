@@ -1,0 +1,25 @@
+.tasksBody {
+    margin: 20px;
+}
+
+.tasks {
+    list-style-type: none;
+    margin: 20px 20px 20px 0;
+
+}
+
+.error {
+    border: 1px solid red;
+}
+
+.errorMessage {
+    color: red;
+}
+
+.activeFilter {
+    background-color: #61dafb;
+}
+
+.taskIsDone {
+    opacity: 0.5;
+}
