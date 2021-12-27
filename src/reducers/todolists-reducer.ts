@@ -2,7 +2,11 @@ import {TasksFiltersType, TodolistType} from "../App";
 import {v1} from "uuid";
 
 
-type ActionTypes = removeTodolistType | addTodolistType | changeTodolistTitleType | changeTodolistFilterType
+type ActionTypes =
+    removeTodolistType
+    | addTodolistType
+    | changeTodolistTitleType
+    | changeTodolistFilterType
 
 export type removeTodolistType = {
     type: "REMOVE-TODOLIST";

@@ -69,7 +69,7 @@ export const Todolist = React.memo(({
             <div>
                 <h3>
                     <EditableSpan value={todolistTitle} onChange={onChangeTodolistTitle}/>
-                    <button onClick={onClickRemoveTodolist}>x</button>
+                    <button onClick={onClickRemoveTodolist}>Del</button>
                 </h3>
             </div>
             <div>
