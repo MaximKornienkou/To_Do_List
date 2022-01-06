@@ -1,5 +1,5 @@
 import {AddTodolistType, RemoveTodolistType, SetTodolistType} from "./todolists-reducer";
-import {TaskType} from "../api/todolistAPI";
+import {TaskStatus, TaskType} from "../api/todolistAPI";
 
 export type ActionTypes = RemoveTaskActionType
     | AddTaskActionType
@@ -29,12 +29,12 @@ export const tasksReducer = (state = initialState, action: ActionTypes): TasksSt
             }
         }
         case "ADD-TASK": {
-            return {...state, [action.task.todoListId]: [action.task, ...state[action.task.todoListId]]}
+            return {...state, [action.task.todolistId]: [action.task, ...state[action.task.todolistId]]}
         }
         case "CHANGE-TASK-STATUS": {
             return {
                 ...state, [action.todolistId]: state[action.todolistId].map
-                ((task) => task.id === action.taskId ? {...task, isDone: action.filter} : task)
+                ((task) => task.id === action.taskId ? {...task, status: action.status} : task)
             }
         }
         case "CHANGE-TASK-TITLE": {
@@ -75,11 +75,11 @@ export const addTaskAC = (task: TaskType) => {
         task,
     } as const
 }
-export const changeTaskStatusAC = (taskId: string, filter: boolean, todolistId: string) => {
+export const changeTaskStatusAC = (taskId: string, status: TaskStatus, todolistId: string) => {
     return {
         type: "CHANGE-TASK-STATUS",
         todolistId,
-        filter,
+        status,
         taskId,
     } as const
 }

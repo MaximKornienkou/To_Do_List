@@ -60,7 +60,6 @@ export const setTodolistAC = (todolists: Array<TodolistType>) => {
         todolists,
     } as const
 }
-
 export const addTodolistAC = (title: string) => {
     return {
         type: "ADD-TODOLIST",
