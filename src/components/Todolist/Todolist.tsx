@@ -1,9 +1,10 @@
 import React, {useCallback} from "react";
 import style from "./Todolist.module.css"
-import {TasksFiltersType, TaskType} from "../../App";
 import {EditableSpan} from "../EditableSpan/EditableSpan";
 import {AddItemForm} from "../AddItemForm/AddItemForm";
 import {Task} from "../Task/Task";
+import {FilterValuesType} from "../../reducers/todolists-reducer";
+import {TaskStatus, TaskType} from "../../api/todolistAPI";
 
 export type TodolistPropsType = {
     todolistTitle: string;
@@ -12,8 +13,8 @@ export type TodolistPropsType = {
     removeTask: (todolistID: string, taskID: string) => void;
     addTask: (taskTitle: string, todolistID: string) => void;
     changeTaskStatus: (todolistID: string, isDone: boolean, taskID: string) => void;
-    statusFilter: (filter: TasksFiltersType, todolistID: string) => void;
-    tasksFilter: TasksFiltersType;
+    statusFilter: (filter: FilterValuesType, todolistID: string) => void;
+    tasksFilter: FilterValuesType;
     removeTodolist: (todolistID: string) => void;
     changeTaskTitle: (taskID: string, newValue: string, todolistID: string) => void;
     changeTodolistTitle: (newValue: string, todolistID: string) => void;
@@ -38,20 +39,20 @@ export const Todolist = React.memo(({
     }, [addTask, todolistID]);
 
     const onClickStatusFilterAll = useCallback(() =>
-        statusFilter("All", todolistID), [statusFilter, todolistID]);
+        statusFilter("all", todolistID), [statusFilter, todolistID]);
     const onClickStatusFilterActive = useCallback(() =>
-        statusFilter("Active", todolistID), [statusFilter, todolistID]);
+        statusFilter("active", todolistID), [statusFilter, todolistID]);
     const onClickStatusFilterCompleted = useCallback(() =>
-        statusFilter("Completed", todolistID), [statusFilter, todolistID]);
+        statusFilter("completed", todolistID), [statusFilter, todolistID]);
 
     let filteredTasks = tasks;
 
-    if (tasksFilter === "Active") {
-        filteredTasks = filteredTasks.filter((task) => !task.isDone)
+    if (tasksFilter === "active") {
+        filteredTasks = filteredTasks.filter((task) => task.status=== TaskStatus.New)
     }
 
-    if (tasksFilter === "Completed") {
-        filteredTasks = filteredTasks.filter((task) => task.isDone)
+    if (tasksFilter === "completed") {
+        filteredTasks = filteredTasks.filter((task) => task.status === TaskStatus.Completed)
     }
 
     const onClickRemoveTask = useCallback((taskId) => {
@@ -92,13 +93,13 @@ export const Todolist = React.memo(({
             </ul>
             <div>
                 <button onClick={onClickStatusFilterAll}
-                        className={tasksFilter === "All" ? style.activeFilter : ""}>All
+                        className={tasksFilter === "all" ? style.activeFilter : ""}>All
                 </button>
                 <button onClick={onClickStatusFilterActive}
-                        className={tasksFilter === "Active" ? style.activeFilter : ""}>Active
+                        className={tasksFilter === "active" ? style.activeFilter : ""}>Active
                 </button>
                 <button onClick={onClickStatusFilterCompleted}
-                        className={tasksFilter === "Completed" ? style.activeFilter : ""}>Completed
+                        className={tasksFilter === "completed" ? style.activeFilter : ""}>Completed
                 </button>
             </div>
         </div>
