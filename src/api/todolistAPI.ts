@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, {AxiosResponse} from "axios";
 
 
 const instance = axios.create({
@@ -9,6 +9,27 @@ const instance = axios.create({
     },
 });
 
-export const todolistAPI = () => {
+export const todolistAPI = {
+    getTodolist() {
+        return instance.get<TodolistType[]>("todo-lists");
+    },
+    createTodolist(title: string) {
+        return instance.post<AxiosResponse<CreateTodolistResponseType>>("todo-lists", {title});
+    },
 
+}
+
+type TodolistType = {
+    id: string
+    addedDate: string
+    order: number
+    title: string
+}
+type CreateTodolistResponseType = {
+    resultCode: number
+    messages: Array<string>
+    fieldsErrors: Array<string>
+    data: {
+        item: TodolistType
+    }
 }
