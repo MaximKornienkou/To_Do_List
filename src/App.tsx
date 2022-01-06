@@ -19,6 +19,7 @@ import {
 import {AppRootStateType} from "./state/store";
 import {useDispatch, useSelector} from "react-redux";
 import {TaskPriority, TaskStatus} from "./api/todolistAPI";
+import { v1 } from "uuid";
 
 export function App() {
 
@@ -44,7 +45,7 @@ export function App() {
     }, [dispatch]);
 
     const addTask = useCallback((taskTitle: string, todolistId: string) => {
-       const task = {id: "1", title: taskTitle, status: TaskStatus.New, todolistId: todolistId, description: "",
+       const task = {id: v1(), title: taskTitle, status: TaskStatus.New, todolistId: todolistId, description: "",
            startDate: "", deadline: "", addedDate: "", order: 0, priority: TaskPriority.Low}
         dispatch(addTaskAC(task));
     }, [dispatch]);
@@ -67,14 +68,6 @@ export function App() {
             {todolists.map((todolist) => {
 
                 let filteredTasks = tasks[todolist.id];
-
-                if (todolist.filter === "active") {
-                    filteredTasks = tasks[todolist.id].filter((task) => TaskStatus.New)
-                }
-
-                if (todolist.filter === "completed") {
-                    filteredTasks = tasks[todolist.id].filter((task) => TaskStatus.Completed)
-                }
 
                 return (
                     <Todolist

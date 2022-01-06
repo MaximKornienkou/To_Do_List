@@ -12,6 +12,7 @@ export type TaskPropsType = {
 
 export const Task = React.memo(({task, changeTaskStatus, changeTaskTitle, removeTask}: TaskPropsType) => {
     console.log("Task")
+    console.log(task.id)
 
     const onClickRemoveTask = useCallback(() => {
         removeTask(task.id)
