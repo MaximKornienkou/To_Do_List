@@ -7,7 +7,7 @@ type ActionTypes =
     | AddTodolistType
     | ChangeTodolistTitleType
     | ChangeTodolistFilterType
-    | SetTodolistType
+    | SetTodolistType;
 
 export type SetTodolistType = ReturnType<typeof setTodolistAC>;
 export type RemoveTodolistType = ReturnType<typeof removeTodolistAC>;
@@ -87,3 +87,4 @@ export const changeTodolistFilterAC = (todolistId: string, filter: FilterValuesT
         filter,
     } as const
 }
+
