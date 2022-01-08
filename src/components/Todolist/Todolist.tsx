@@ -14,12 +14,12 @@ export type TodolistPropsType = {
     tasks: Array<TaskType>;
     removeTask: (todolistId: string, taskId: string) => void;
     addTask: (todolistId: string, title: string) => void;
-    changeTaskStatus: (todolistId: string, status: TaskStatus, taskId: string) => void;
+    changeTaskStatus: (todolistId: string, taskId: string, status: TaskStatus) => void;
     statusFilter: (filter: FilterValuesType, todolistId: string) => void;
     tasksFilter: FilterValuesType;
     removeTodolist: (todolistId: string) => void;
-    changeTaskTitle: (taskId: string, newValue: string, todolistId: string) => void;
-    changeTodolistTitle: (newValue: string, todolistId: string) => void;
+    changeTaskTitle: (todolistId: string, taskId: string, title: string) => void;
+    changeTodolistTitle: (todolistId: string, title: string) => void;
 }
 
 export const Todolist = React.memo(({
@@ -34,8 +34,8 @@ export const Todolist = React.memo(({
         dispatch(setTasks(todolistId));
     }, [dispatch, todolistId]);
 
-    const onChangeTodolistTitle = useCallback((newValue: string) => {
-        changeTodolistTitle(newValue, todolistId);
+    const onChangeTodolistTitle = useCallback((title: string) => {
+        changeTodolistTitle(todolistId, title);
     }, [changeTodolistTitle, todolistId]);
 
     const onClickRemoveTodolist = useCallback(() => {
@@ -66,14 +66,13 @@ export const Todolist = React.memo(({
     const onClickRemoveTask = useCallback((taskId) => {
         removeTask(todolistId, taskId);
     }, [removeTask, todolistId]);
-    const onChangeTaskStatus = useCallback((status: TaskStatus, taskId: string) => {
-        changeTaskStatus(todolistId, status, taskId);
+    const onChangeTaskStatus = useCallback((taskId: string, status: TaskStatus) => {
+        changeTaskStatus(todolistId, taskId, status);
     }, [changeTaskStatus, todolistId]);
-    const onChangeTaskTitle = useCallback((taskId: string, newValue: string) => {
-        changeTaskTitle(taskId, newValue, todolistId);
+    const onChangeTaskTitle = useCallback((taskId: string, title: string) => {
+        changeTaskTitle(todolistId, taskId, title);
     }, [changeTaskTitle, todolistId]);
 
-    console.log(tasks)
     return (
         <div className={style.tasksBody}>
             <div>

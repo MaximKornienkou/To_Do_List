@@ -5,8 +5,8 @@ import {TaskStatus, TaskType} from "../../api/todolistAPI";
 
 export type TaskPropsType = {
     task: TaskType;
-    changeTaskStatus: (status: TaskStatus, taskId: string) => void;
-    changeTaskTitle: (taskId: string, newValue: string) => void;
+    changeTaskStatus: (taskId: string, status: TaskStatus) => void;
+    changeTaskTitle: (taskId: string, title: string) => void;
     removeTask: (taskId: string) => void;
 }
 
@@ -16,10 +16,10 @@ export const Task = React.memo(({task, changeTaskStatus, changeTaskTitle, remove
         removeTask(task.id)
     }, [removeTask, task.id]);
     const onChangeStatusTask = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-        changeTaskStatus(event.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New, task.id);
+        changeTaskStatus(task.id,event.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New);
     }, [changeTaskStatus, task.id]);
-    const onChangeTaskTitle = useCallback((newValue: string) => {
-        changeTaskTitle(task.id, newValue);
+    const onChangeTaskTitle = useCallback((title: string) => {
+        changeTaskTitle(task.id, title);
     }, [changeTaskTitle, task.id]);
 
     return (

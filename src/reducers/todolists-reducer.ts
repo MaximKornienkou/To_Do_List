@@ -1,4 +1,3 @@
-import {v1} from "uuid";
 import {todolistAPI, TodolistType} from "../api/todolistAPI";
 import {AppThunk} from "../state/store";
 
@@ -21,13 +20,7 @@ export const todolistReducer = (state = initialState, action: TodolistActionType
             return state.filter((todolist) => todolist.id !== action.todolistId);
         }
         case "ADD-TODOLIST": {
-            return [{
-                id: action.todolistId,
-                title: action.title,
-                filter: 'all',
-                addedDate: '',
-                order: 0
-            }, ...state];
+            return [{...action.todolist, filter: 'all'}, ...state];
         }
         case "CHANGE-TODOLIST-TITLE": {
             return state.map((todolist) =>
@@ -47,6 +40,39 @@ export const setTodolists = (): AppThunk =>
         try {
             const result = await todolistAPI.getTodolist();
             dispatch(setTodolistAC(result.data));
+        } catch (error) {
+
+        } finally {
+
+        }
+    }
+export const createTodolist = (title: string): AppThunk =>
+    async dispatch => {
+        try {
+            const result = await todolistAPI.createTodolist(title);
+            dispatch(addTodolistAC(result.data.data.item));
+        } catch (error) {
+
+        } finally {
+
+        }
+    }
+export const changeTodolistTitleTC = (todolistId: string, title: string): AppThunk =>
+    async dispatch => {
+        try {
+            await todolistAPI.updateTodolist({todolistId, title});
+            dispatch(changeTodolistTitleAC(todolistId, title));
+        } catch (error) {
+
+        } finally {
+
+        }
+    }
+export const deleteTodolist = (todolistId: string): AppThunk =>
+    async dispatch => {
+        try {
+            await todolistAPI.deleteTodolist(todolistId);
+            dispatch(removeTodolistAC(todolistId));
         } catch (error) {
 
         } finally {
@@ -73,11 +99,10 @@ export const setTodolistAC = (todolists: Array<TodolistType>) => {
         todolists,
     } as const
 }
-export const addTodolistAC = (title: string) => {
+export const addTodolistAC = (todolist: TodolistType) => {
     return {
         type: "ADD-TODOLIST",
-        title,
-        todolistId: v1(),
+        todolist,
     } as const
 }
 export const removeTodolistAC = (todolistId: string) => {
@@ -86,7 +111,7 @@ export const removeTodolistAC = (todolistId: string) => {
         todolistId,
     } as const
 }
-export const changeTodolistTitleAC = (title: string, todolistId: string) => {
+export const changeTodolistTitleAC = (todolistId: string, title: string) => {
     return {
         type: "CHANGE-TODOLIST-TITLE",
         todolistId,

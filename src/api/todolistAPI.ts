@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import axios, {AxiosResponse} from "axios";
 
 
 const instance = axios.create({
@@ -14,9 +14,9 @@ export const todolistAPI = {
         return instance.get<TodolistType[]>("todo-lists");
     },
     createTodolist(title: string) {
-        return instance.post<ResponseType<{item: TodolistType}>>("todo-lists", {title});
+        return instance.post<ResponseType<{ item: TodolistType }>>("todo-lists", {title});
     },
-    updateTodolist(params: {todolistId: string, title: string}) {
+    updateTodolist(params: { todolistId: string, title: string }) {
         return instance.put<ResponseType>(`todo-lists/${params.todolistId}`, {title: params.title});
     },
     deleteTodolist(todolistId: string) {
@@ -25,13 +25,15 @@ export const todolistAPI = {
     getTasks(todolistId: string) {
         return instance.get<GetTasksResponse>(`todo-lists/${todolistId}/tasks`);
     },
-    createTask(params: {todoListId: string, title: string}) {
-        return instance.post<{ title: string }, AxiosResponse<ResponseType<{item: TaskType}>>>(`todo-lists/${params.todoListId}/tasks`, {title: params.title});
+    createTask(params: { todoListId: string, title: string }) {
+        return instance.post<{ title: string }, AxiosResponse<ResponseType<{ item: TaskType }>>>
+        (`todo-lists/${params.todoListId}/tasks`, {title: params.title});
     },
-    updateTask(params: {todolistId: string, taskId: string, model: UpdateTaskModelType}) {
-        return instance.put<ResponseType>(`todo-lists/${params.todolistId}/tasks/${params.taskId}`, {model: params.model});
+    updateTask(todolistId: string, taskId: string, apiModel: UpdateTaskModelType) {
+        return instance.put<UpdateTaskModelType, AxiosResponse<ResponseType<{ item: TaskType }>>>
+        (`todo-lists/${todolistId}/tasks/${taskId}`, apiModel);
     },
-    deleteTask(params: {todolistId: string, taskId: string}) {
+    deleteTask(params: { todolistId: string, taskId: string }) {
         return instance.delete<ResponseType>(`todo-lists/${params.todolistId}/tasks/${params.taskId}`);
     },
 

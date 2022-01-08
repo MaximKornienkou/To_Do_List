@@ -89,7 +89,12 @@ test('title of specified task should be changed', () => {
 });
 test('new array should be added when new todolist is added', () => {
 
-    const action = addTodolistAC("new todolist");
+    const action = addTodolistAC({id: "1",
+        addedDate: "",
+        order: 0,
+        title: "New Todolist",
+        filter: "all",
+    };
 
     const endState = tasksReducer(startState, action)
 
@@ -107,7 +112,13 @@ test('ids should be equals', () => {
     const startTasksState: TasksStateType = {};
     const startTodolistState: Array<TodolistDomainType> = [];
 
-    const action = addTodolistAC("new todolist");
+    let newTodolistTitle = {id: "1",
+        addedDate: "",
+        order: 0,
+        title: "New Todolist",
+        filter: "all",
+    };
+    const action = addTodolistAC(newTodolistTitle);
 
     const endTasksState = tasksReducer(startTasksState, action)
     const endTodolistState = todolistReducer(startTodolistState, action)
@@ -116,7 +127,7 @@ test('ids should be equals', () => {
     const idFromTasks = keys[0];
     const idFromTodolist = endTodolistState[0].id;
 
-    expect(idFromTasks).toBe(action.todolistId);
+    expect(idFromTasks).toBe(action.todolistId.id);
     expect(idFromTodolist).toBe(action.todolistId);
 });
 test('property with todolistId should be deleted', () => {
