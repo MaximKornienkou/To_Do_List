@@ -1,19 +1,7 @@
 import {v1} from "uuid";
-import { TodolistType } from "../api/todolistAPI";
+import {todolistAPI, TodolistType} from "../api/todolistAPI";
+import {AppThunk} from "../state/store";
 
-
-type ActionTypes =
-    RemoveTodolistType
-    | AddTodolistType
-    | ChangeTodolistTitleType
-    | ChangeTodolistFilterType
-    | SetTodolistType;
-
-export type SetTodolistType = ReturnType<typeof setTodolistAC>;
-export type RemoveTodolistType = ReturnType<typeof removeTodolistAC>;
-export type AddTodolistType = ReturnType<typeof addTodolistAC>;
-export type ChangeTodolistTitleType = ReturnType<typeof changeTodolistTitleAC>;
-export type ChangeTodolistFilterType = ReturnType<typeof changeTodolistFilterAC>;
 
 export type FilterValuesType = 'all' | 'active' | 'completed';
 export type TodolistDomainType = TodolistType & {
@@ -22,7 +10,7 @@ export type TodolistDomainType = TodolistType & {
 
 const initialState: Array<TodolistDomainType> = []
 
-export const todolistReducer = (state = initialState, action: ActionTypes): Array<TodolistDomainType> => {
+export const todolistReducer = (state = initialState, action: TodolistActionTypes): Array<TodolistDomainType> => {
     switch (action.type) {
         case "SET-TODOLISTS": {
             return action.todolists.map((todolist) => {
@@ -53,6 +41,31 @@ export const todolistReducer = (state = initialState, action: ActionTypes): Arra
             return state;
     }
 }
+
+export const setTodolists = (): AppThunk =>
+    async dispatch => {
+        try {
+            const result = await todolistAPI.getTodolist();
+            dispatch(setTodolistAC(result.data));
+        } catch (error) {
+
+        } finally {
+
+        }
+    }
+
+export type TodolistActionTypes =
+    RemoveTodolistType
+    | AddTodolistType
+    | ChangeTodolistTitleType
+    | ChangeTodolistFilterType
+    | SetTodolistType;
+
+export type SetTodolistType = ReturnType<typeof setTodolistAC>;
+export type RemoveTodolistType = ReturnType<typeof removeTodolistAC>;
+export type AddTodolistType = ReturnType<typeof addTodolistAC>;
+export type ChangeTodolistTitleType = ReturnType<typeof changeTodolistTitleAC>;
+export type ChangeTodolistFilterType = ReturnType<typeof changeTodolistFilterAC>;
 
 export const setTodolistAC = (todolists: Array<TodolistType>) => {
     return {

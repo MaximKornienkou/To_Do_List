@@ -1,4 +1,4 @@
-import React, {useCallback} from "react";
+import React, {useCallback, useEffect} from "react";
 import "./App.css";
 import {Todolist} from "./components/Todolist/Todolist";
 import {AddItemForm} from "./components/AddItemForm/AddItemForm";
@@ -13,7 +13,7 @@ import {
     addTodolistAC,
     changeTodolistFilterAC,
     changeTodolistTitleAC, FilterValuesType,
-    removeTodolistAC,
+    removeTodolistAC, setTodolistAC, setTodolists,
     TodolistDomainType,
 } from "./reducers/todolists-reducer";
 import {AppRootStateType} from "./state/store";
@@ -27,9 +27,12 @@ export function App() {
     const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks);
     const dispatch = useDispatch();
 
+    useEffect(() => {
+        dispatch(setTodolists());
+    }, [dispatch]);
+
     const addTodolist = useCallback((todolistTitle: string) => {
-        const action = addTodolistAC(todolistTitle);
-        dispatch(action);
+        dispatch(addTodolistAC(todolistTitle));
     }, [dispatch]);
 
     const removeTodolist = useCallback((todolistId: string) => {
