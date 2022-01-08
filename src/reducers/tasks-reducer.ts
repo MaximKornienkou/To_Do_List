@@ -18,7 +18,7 @@ export const tasksReducer = (state = initialState, action: TaskActionTypes): Tas
             }
         }
         case "ADD-TASK": {
-            return {...state, [action.task.todolistId]: [action.task, ...state[action.task.todolistId]]}
+            return {...state, [action.task.todoListId]: [action.task, ...state[action.task.todoListId]]}
         }
         case "CHANGE-TASK-STATUS": {
             return {
@@ -54,17 +54,36 @@ export const tasksReducer = (state = initialState, action: TaskActionTypes): Tas
     }
 }
 
-export const setTasks = (todolistId: string): AppThunk =>
-    async dispatch => {
-        try {
-            const result = await todolistAPI.getTasks(todolistId);
-            dispatch(setTasksAC(todolistId, result.data.items));
-        } catch (error) {
+export const setTasks = (todolistId: string): AppThunk => async dispatch => {
+    try {
+        const result = await todolistAPI.getTasks(todolistId);
+        dispatch(setTasksAC(todolistId, result.data.items));
+    } catch (error) {
 
-        } finally {
+    } finally {
 
-        }
     }
+}
+export const deleteTask = (todolistId: string, taskId: string): AppThunk => async dispatch => {
+    try {
+        await todolistAPI.deleteTask({todolistId, taskId});
+        dispatch(removeTaskAC(todolistId, taskId));
+    } catch (error) {
+
+    } finally {
+
+    }
+}
+export const createTask = (todoListId: string, title: string): AppThunk => async dispatch => {
+    try {
+        const result = await todolistAPI.createTask({todoListId, title});
+        dispatch(addTaskAC(result.data.data.item));
+    } catch (error) {
+
+    } finally {
+
+    }
+}
 
 export type TaskActionTypes = RemoveTaskActionType
     | SetTasksActionType

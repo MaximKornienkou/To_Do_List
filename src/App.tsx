@@ -3,23 +3,21 @@ import "./App.css";
 import {Todolist} from "./components/Todolist/Todolist";
 import {AddItemForm} from "./components/AddItemForm/AddItemForm";
 import {
-    addTaskAC,
     changeTaskStatusAC,
-    changeTaskTitleAC,
-    removeTaskAC,
+    changeTaskTitleAC, createTask, deleteTask,
     TasksStateType
 } from "./reducers/tasks-reducer";
 import {
     addTodolistAC,
     changeTodolistFilterAC,
     changeTodolistTitleAC, FilterValuesType,
-    removeTodolistAC, setTodolistAC, setTodolists,
+    removeTodolistAC, setTodolists,
     TodolistDomainType,
 } from "./reducers/todolists-reducer";
 import {AppRootStateType} from "./state/store";
 import {useDispatch, useSelector} from "react-redux";
-import {TaskPriority, TaskStatus} from "./api/todolistAPI";
-import { v1 } from "uuid";
+import {TaskStatus} from "./api/todolistAPI";
+
 
 export function App() {
 
@@ -44,13 +42,11 @@ export function App() {
     }, [dispatch]);
 
     const removeTask = useCallback((todolistId: string, taskId: string) => {
-        dispatch(removeTaskAC(todolistId, taskId));
+        dispatch(deleteTask(todolistId, taskId));
     }, [dispatch]);
 
-    const addTask = useCallback((taskTitle: string, todolistId: string) => {
-       const task = {id: v1(), title: taskTitle, status: TaskStatus.New, todolistId: todolistId, description: "",
-           startDate: "", deadline: "", addedDate: "", order: 0, priority: TaskPriority.Low}
-        dispatch(addTaskAC(task));
+    const addTask = useCallback((todolistId: string, title: string) => {
+        dispatch(createTask(todolistId, title));
     }, [dispatch]);
 
     const changeTaskTitle = useCallback((taskId: string, newValue: string, todolistId: string) => {

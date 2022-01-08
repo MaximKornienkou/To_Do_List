@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
 
 const instance = axios.create({
@@ -25,8 +25,8 @@ export const todolistAPI = {
     getTasks(todolistId: string) {
         return instance.get<GetTasksResponse>(`todo-lists/${todolistId}/tasks`);
     },
-    createTask(params: {todolistId: string, title: string}) {
-        return instance.post<ResponseType<TaskType>>(`todo-lists/${params.todolistId}/tasks`, {title: params.title});
+    createTask(params: {todoListId: string, title: string}) {
+        return instance.post<{ title: string }, AxiosResponse<ResponseType<{item: TaskType}>>>(`todo-lists/${params.todoListId}/tasks`, {title: params.title});
     },
     updateTask(params: {todolistId: string, taskId: string, model: UpdateTaskModelType}) {
         return instance.put<ResponseType>(`todo-lists/${params.todolistId}/tasks/${params.taskId}`, {model: params.model});
@@ -74,7 +74,7 @@ export type TaskType = {
     startDate: string,
     deadline: string,
     id: string,
-    todolistId: string,
+    todoListId: string,
     order: number,
     addedDate: string,
 }

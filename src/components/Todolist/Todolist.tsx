@@ -13,7 +13,7 @@ export type TodolistPropsType = {
     todolistId: string;
     tasks: Array<TaskType>;
     removeTask: (todolistId: string, taskId: string) => void;
-    addTask: (taskTitle: string, todolistId: string) => void;
+    addTask: (todolistId: string, title: string) => void;
     changeTaskStatus: (todolistId: string, status: TaskStatus, taskId: string) => void;
     statusFilter: (filter: FilterValuesType, todolistId: string) => void;
     tasksFilter: FilterValuesType;
@@ -42,8 +42,8 @@ export const Todolist = React.memo(({
         removeTodolist(todolistId)
     }, [removeTodolist, todolistId]);
 
-    const onClickAddTask = useCallback((taskTitle: string) => {
-        addTask(taskTitle, todolistId);
+    const onClickAddTask = useCallback((title: string) => {
+        addTask(todolistId, title);
     }, [addTask, todolistId]);
 
     const onClickStatusFilterAll = useCallback(() =>
@@ -73,6 +73,7 @@ export const Todolist = React.memo(({
         changeTaskTitle(taskId, newValue, todolistId);
     }, [changeTaskTitle, todolistId]);
 
+    console.log(tasks)
     return (
         <div className={style.tasksBody}>
             <div>
