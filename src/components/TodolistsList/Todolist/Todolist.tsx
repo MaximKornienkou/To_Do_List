@@ -1,12 +1,12 @@
 import React, {useCallback, useEffect} from "react";
 import style from "./Todolist.module.css"
-import {EditableSpan} from "../EditableSpan/EditableSpan";
-import {AddItemForm} from "../AddItemForm/AddItemForm";
-import {Task} from "../Task/Task";
-import {FilterValuesType} from "../../reducers/todolists-reducer";
-import {TaskStatus, TaskType} from "../../api/todolistAPI";
+import {EditableSpan} from "../../EditableSpan/EditableSpan";
+import {AddItemForm} from "../../AddItemForm/AddItemForm";
+import {Task} from "./Task/Task";
+import {FilterValuesType} from "../../../reducers/todolists-reducer";
+import {TaskStatus, TaskType} from "../../../api/todolistAPI";
 import {useDispatch} from "react-redux";
-import {setTasks} from "../../reducers/tasks-reducer";
+import {setTasks} from "../../../reducers/tasks-reducer";
 
 export type TodolistPropsType = {
     todolistTitle: string;

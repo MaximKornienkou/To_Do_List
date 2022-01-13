@@ -90,7 +90,7 @@ test('new array should be added when new todolist is added', () => {
     const action = addTodolistAC({id: "1",
         addedDate: "",
         order: 0,
-        title: "New Todolist",
+        title: "New TodolistsList",
     });
 
     const endState = tasksReducer(startState, action)
@@ -112,7 +112,7 @@ test('ids should be equals', () => {
     let newTodolistTitle = {id: "1",
         addedDate: "",
         order: 0,
-        title: "New Todolist",
+        title: "New TodolistsList",
         filter: "all",
     };
     const action = addTodolistAC(newTodolistTitle);

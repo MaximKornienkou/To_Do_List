@@ -1,6 +1,5 @@
 import axios, {AxiosResponse} from "axios";
 
-
 const instance = axios.create({
     baseURL: "https://social-network.samuraijs.com/api/1.1/",
     withCredentials: true,
@@ -9,6 +8,7 @@ const instance = axios.create({
     },
 });
 
+// api
 export const todolistAPI = {
     getTodolist() {
         return instance.get<TodolistType[]>("todo-lists");
@@ -39,6 +39,7 @@ export const todolistAPI = {
 
 }
 
+// types
 export type TodolistType = {
     id: string,
     addedDate: string,

@@ -1,7 +1,7 @@
 import React, {ChangeEvent, useCallback} from "react";
-import style from "../Todolist/Todolist.module.css";
-import {EditableSpan} from "../EditableSpan/EditableSpan";
-import {TaskStatus, TaskType} from "../../api/todolistAPI";
+import style from "../Todolist.module.css";
+import {EditableSpan} from "../../../EditableSpan/EditableSpan";
+import {TaskStatus, TaskType} from "../../../../api/todolistAPI";
 
 export type TaskPropsType = {
     task: TaskType;

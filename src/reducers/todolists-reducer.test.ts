@@ -19,7 +19,7 @@ beforeEach(() => {
         {id: todolistId1, addedDate: "123", order: 1, title:"What to learn", filter: "all"},
         {id: todolistId2, addedDate: "1234", order: 2, title:"What to buy", filter: "all"},
     ]
-})
+});
 
 test('correct todolist should be removed', () => {
 
@@ -33,21 +33,21 @@ test('correct todolist should be added', () => {
     let newTodolistTitle = {id: "1",
         addedDate: "",
         order: 0,
-        title: "New Todolist",
+        title: "New TodolistsList",
         filter: "all",
     };
 
     const endState = todolistReducer(startState, addTodolistAC(newTodolistTitle));
 
     expect(endState.length).toBe(3);
-    expect(endState[0].title).toBe("New Todolist");
+    expect(endState[0].title).toBe("New TodolistsList");
     expect(endState[0].filter).toBe("all");
 });
 test('correct todolist should change its name', () => {
 
-    let newTodolistTitle = "New Todolist";
+    let newTodolistTitle = "New TodolistsList";
 
-    const endState = todolistReducer(startState, changeTodolistTitleAC(todolistId2, "New Todolist"));
+    const endState = todolistReducer(startState, changeTodolistTitleAC(todolistId2, "New TodolistsList"));
 
     expect(endState[0].title).toBe("What to learn");
     expect(endState[1].title).toBe(newTodolistTitle);

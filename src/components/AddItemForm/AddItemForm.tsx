@@ -1,5 +1,5 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from "react";
-import style from "../Todolist/Todolist.module.css";
+import style from "../TodolistsList/Todolist/Todolist.module.css";
 
 export type AddItemFormTypes = {
     addItem: (title: string) => void;

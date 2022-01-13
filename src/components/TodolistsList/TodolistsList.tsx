@@ -1,18 +1,20 @@
-import React, {useCallback, useEffect} from "react";
-import "./App.css";
-import {Todolist} from "./components/Todolist/Todolist";
-import {AddItemForm} from "./components/AddItemForm/AddItemForm";
-import {createTask, deleteTask, TasksStateType, updateTask} from "./reducers/tasks-reducer";
-import {
-    changeTodolistFilterAC, changeTodolistTitleTC, createTodolist,
-    deleteTodolist, FilterValuesType, setTodolists, TodolistDomainType,
-} from "./reducers/todolists-reducer";
-import {AppRootStateType} from "./state/store";
 import {useDispatch, useSelector} from "react-redux";
-import {TaskStatus} from "./api/todolistAPI";
+import {AppRootStateType} from "../../state/store";
+import {
+    changeTodolistFilterAC,
+    changeTodolistTitleTC,
+    createTodolist,
+    deleteTodolist, FilterValuesType,
+    setTodolists,
+    TodolistDomainType
+} from "../../reducers/todolists-reducer";
+import {createTask, deleteTask, TasksStateType, updateTask} from "../../reducers/tasks-reducer";
+import React, {useCallback, useEffect} from "react";
+import {TaskStatus} from "../../api/todolistAPI";
+import {AddItemForm} from "../AddItemForm/AddItemForm";
+import {Todolist} from "./Todolist/Todolist";
 
-
-export function App() {
+export const TodolistsList = () => {
 
     const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists);
     const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks);
@@ -44,7 +46,7 @@ export function App() {
 
     const changeTaskTitle = useCallback((todolistId: string, taskId: string, title: string) => {
         dispatch(updateTask(todolistId, taskId, {title}));
-    },[dispatch]);
+    }, [dispatch]);
 
     const changeTaskStatus = useCallback((todolistId: string, taskId: string, status: TaskStatus) => {
         dispatch(updateTask(todolistId, taskId, {status}));
@@ -55,18 +57,20 @@ export function App() {
     }, [dispatch]);
 
     return (
-        <div className="App">
-            <AddItemForm addItem={addTodolist}/>
+        <>
+            <div style={{padding: "10px", marginTop: "50px"}}>
+                <AddItemForm addItem={addTodolist}/>
+            </div>
             {todolists.map((todolist) => {
 
-                let filteredTasks = tasks[todolist.id];
+                let todolistsTasks = tasks[todolist.id];
 
                 return (
                     <Todolist
                         key={todolist.id}
                         todolistId={todolist.id}
                         todolistTitle={todolist.title}
-                        tasks={filteredTasks}
+                        tasks={todolistsTasks}
                         removeTask={removeTask}
                         addTask={addTask}
                         changeTaskStatus={changeTaskStatus}
@@ -79,6 +83,6 @@ export function App() {
                 )
             })
             }
-        </div>
-    );
+        </>
+    )
 }
