@@ -1,6 +1,7 @@
 import {AddTodolistType, RemoveTodolistType, SetTodolistType} from "./todolists-reducer";
 import {TaskPriority, TaskStatus, TaskType, todolistAPI, UpdateTaskModelType} from "../api/todolistAPI";
 import {AppRootStateType, AppThunk} from "../state/store";
+import {setAppLoading} from "./app-reducer";
 
 const initialState: TasksStateType = {}
 
@@ -58,13 +59,12 @@ export const deleteTask = (todolistId: string, taskId: string): AppThunk => asyn
 }
 
 export const createTask = (todoListId: string, title: string): AppThunk => async dispatch => {
+    dispatch(setAppLoading("idle"));
     try {
         const result = await todolistAPI.createTask({todoListId, title});
         dispatch(addTaskAC(result.data.data.item));
-    } catch (error) {
-
     } finally {
-
+        dispatch(setAppLoading("succeeded"));
     }
 }
 

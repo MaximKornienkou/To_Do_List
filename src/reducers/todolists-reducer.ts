@@ -1,5 +1,6 @@
 import {todolistAPI, TodolistType} from "../api/todolistAPI";
 import {AppThunk} from "../state/store";
+import {setAppLoading} from "./app-reducer";
 
 const initialState: Array<TodolistDomainType> = []
 
@@ -23,53 +24,49 @@ export const todolistReducer = (state = initialState, action: TodolistActionType
 }
 
 // thunks
-export const setTodolists = (): AppThunk =>
-    async dispatch => {
-        try {
-            const result = await todolistAPI.getTodolist();
-            dispatch(setTodolistAC(result.data));
-        } catch (error) {
+export const setTodolists = (): AppThunk => async dispatch => {
+    try {
+        const result = await todolistAPI.getTodolist();
+        dispatch(setTodolistAC(result.data));
+    } catch (error) {
 
-        } finally {
-
-        }
+    } finally {
+        dispatch(setAppLoading("succeeded"));
     }
+}
 
-export const createTodolist = (title: string): AppThunk =>
-    async dispatch => {
-        try {
-            const result = await todolistAPI.createTodolist(title);
-            dispatch(addTodolistAC(result.data.data.item));
-        } catch (error) {
+export const createTodolist = (title: string): AppThunk => async dispatch => {
+    try {
+        const result = await todolistAPI.createTodolist(title);
+        dispatch(addTodolistAC(result.data.data.item));
+    } catch (error) {
 
-        } finally {
+    } finally {
 
-        }
     }
+}
 
-export const changeTodolistTitleTC = (todolistId: string, title: string): AppThunk =>
-    async dispatch => {
-        try {
-            await todolistAPI.updateTodolist({todolistId, title});
-            dispatch(changeTodolistTitleAC(todolistId, title));
-        } catch (error) {
+export const changeTodolistTitleTC = (todolistId: string, title: string): AppThunk => async dispatch => {
+    try {
+        await todolistAPI.updateTodolist({todolistId, title});
+        dispatch(changeTodolistTitleAC(todolistId, title));
+    } catch (error) {
 
-        } finally {
+    } finally {
 
-        }
     }
+}
 
-export const deleteTodolist = (todolistId: string): AppThunk =>
-    async dispatch => {
-        try {
-            await todolistAPI.deleteTodolist(todolistId);
-            dispatch(removeTodolistAC(todolistId));
-        } catch (error) {
+export const deleteTodolist = (todolistId: string): AppThunk => async dispatch => {
+    try {
+        await todolistAPI.deleteTodolist(todolistId);
+        dispatch(removeTodolistAC(todolistId));
+    } catch (error) {
 
-        } finally {
+    } finally {
 
-        }
     }
+}
 
 // actions
 export const setTodolistAC = (todolists: Array<TodolistType>) =>

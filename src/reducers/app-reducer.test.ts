@@ -1,18 +1,24 @@
-import {appReducer, InitialStateType, setStatus} from "./app-reducer";
+import {appReducer, InitialStateType, setAppLoading, setError} from "./app-reducer";
 
 let startState: InitialStateType
 
 beforeEach(() => {
 
     startState = {
-        status: true,
+        loadingStatus: "idle",
         error: null
     }
 });
 
 test("status should be equal false", () => {
 
-    const endState = appReducer(startState, setStatus(false));
+    const endState = appReducer(startState, setAppLoading("succeeded"));
 
-    expect(endState.status).toBe(false);
+    expect(endState.loadingStatus).toBe("succeeded");
+});
+test("error should be equal error", () => {
+
+    const endState = appReducer(startState, setError("error"));
+
+    expect(endState.error).toBe("error");
 });
