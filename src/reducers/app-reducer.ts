@@ -1,4 +1,4 @@
-type RequestStatusType = "idle" | "loading" | "succeeded";
+export type RequestStatusType = "idle" | "loading" | "succeeded";
 
 export type InitialStateType = {
     loadingStatus: RequestStatusType

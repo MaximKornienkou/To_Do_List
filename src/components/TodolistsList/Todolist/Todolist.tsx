@@ -3,86 +3,86 @@ import style from "./Todolist.module.css"
 import {EditableSpan} from "../../EditableSpan/EditableSpan";
 import {AddItemForm} from "../../AddItemForm/AddItemForm";
 import {Task} from "./Task/Task";
-import {FilterValuesType} from "../../../reducers/todolists-reducer";
+import {FilterValuesType, TodolistDomainType} from "../../../reducers/todolists-reducer";
 import {TaskStatus, TaskType} from "../../../api/todolistAPI";
 import {useDispatch} from "react-redux";
 import {setTasks} from "../../../reducers/tasks-reducer";
 
 export type TodolistPropsType = {
-    todolistTitle: string;
-    todolistId: string;
+    todolist: TodolistDomainType
     tasks: Array<TaskType>;
     removeTask: (todolistId: string, taskId: string) => void;
     addTask: (todolistId: string, title: string) => void;
     changeTaskStatus: (todolistId: string, taskId: string, status: TaskStatus) => void;
     statusFilter: (filter: FilterValuesType, todolistId: string) => void;
-    tasksFilter: FilterValuesType;
     removeTodolist: (todolistId: string) => void;
     changeTaskTitle: (todolistId: string, taskId: string, title: string) => void;
     changeTodolistTitle: (todolistId: string, title: string) => void;
 }
 
 export const Todolist = React.memo(({
-                                        todolistTitle, todolistId, tasks, removeTask,
-                                        addTask, changeTaskStatus, statusFilter, tasksFilter,
+                                        todolist, tasks, removeTask,
+                                        addTask, changeTaskStatus, statusFilter,
                                         removeTodolist, changeTaskTitle, changeTodolistTitle
                                     }: TodolistPropsType) => {
 
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(setTasks(todolistId));
-    }, [dispatch, todolistId]);
+        dispatch(setTasks(todolist.id));
+    }, [dispatch, todolist.id]);
 
     const onChangeTodolistTitle = useCallback((title: string) => {
-        changeTodolistTitle(todolistId, title);
-    }, [changeTodolistTitle, todolistId]);
+        changeTodolistTitle(todolist.id, title);
+    }, [changeTodolistTitle, todolist.id]);
 
     const onClickRemoveTodolist = useCallback(() => {
-        removeTodolist(todolistId)
-    }, [removeTodolist, todolistId]);
+        removeTodolist(todolist.id)
+    }, [removeTodolist, todolist.id]);
 
     const onClickAddTask = useCallback((title: string) => {
-        addTask(todolistId, title);
-    }, [addTask, todolistId]);
+        addTask(todolist.id, title);
+    }, [addTask, todolist.id]);
 
     const onClickStatusFilterAll = useCallback(() =>
-        statusFilter("all", todolistId), [statusFilter, todolistId]);
+        statusFilter("all", todolist.id), [statusFilter, todolist.id]);
     const onClickStatusFilterActive = useCallback(() =>
-        statusFilter("active", todolistId), [statusFilter, todolistId]);
+        statusFilter("active", todolist.id), [statusFilter, todolist.id]);
     const onClickStatusFilterCompleted = useCallback(() =>
-        statusFilter("completed", todolistId), [statusFilter, todolistId]);
+        statusFilter("completed", todolist.id), [statusFilter, todolist.id]);
 
     let filteredTasks = tasks;
 
-    if (tasksFilter === "active") {
-        filteredTasks = filteredTasks.filter((task) => task.status=== TaskStatus.New)
+    if (todolist.filter === "active") {
+        filteredTasks = filteredTasks.filter((task) => task.status === TaskStatus.New)
     }
 
-    if (tasksFilter === "completed") {
+    if (todolist.filter === "completed") {
         filteredTasks = filteredTasks.filter((task) => task.status === TaskStatus.Completed)
     }
 
     const onClickRemoveTask = useCallback((taskId) => {
-        removeTask(todolistId, taskId);
-    }, [removeTask, todolistId]);
+        removeTask(todolist.id, taskId);
+    }, [removeTask, todolist.id]);
     const onChangeTaskStatus = useCallback((taskId: string, status: TaskStatus) => {
-        changeTaskStatus(todolistId, taskId, status);
-    }, [changeTaskStatus, todolistId]);
+        changeTaskStatus(todolist.id, taskId, status);
+    }, [changeTaskStatus, todolist.id]);
     const onChangeTaskTitle = useCallback((taskId: string, title: string) => {
-        changeTaskTitle(todolistId, taskId, title);
-    }, [changeTaskTitle, todolistId]);
+        changeTaskTitle(todolist.id, taskId, title);
+    }, [changeTaskTitle, todolist.id]);
 
     return (
         <div className={style.tasksBody}>
             <div>
                 <h3>
-                    <EditableSpan value={todolistTitle} onChange={onChangeTodolistTitle}/>
-                    <button onClick={onClickRemoveTodolist}>Del</button>
+                    <EditableSpan value={todolist.title} onChange={onChangeTodolistTitle}/>
+                    <button onClick={onClickRemoveTodolist}
+                            disabled={todolist.entityStatus === "loading"}>Del
+                    </button>
                 </h3>
             </div>
             <div>
-                <AddItemForm addItem={onClickAddTask}/>
+                <AddItemForm addItem={onClickAddTask} disabled={todolist.entityStatus === "loading"}/>
             </div>
 
             <ul className={style.tasks}>
@@ -101,13 +101,13 @@ export const Todolist = React.memo(({
             </ul>
             <div>
                 <button onClick={onClickStatusFilterAll}
-                        className={tasksFilter === "all" ? style.activeFilter : ""}>All
+                        className={todolist.filter === "all" ? style.activeFilter : ""}>All
                 </button>
                 <button onClick={onClickStatusFilterActive}
-                        className={tasksFilter === "active" ? style.activeFilter : ""}>Active
+                        className={todolist.filter === "active" ? style.activeFilter : ""}>Active
                 </button>
                 <button onClick={onClickStatusFilterCompleted}
-                        className={tasksFilter === "completed" ? style.activeFilter : ""}>Completed
+                        className={todolist.filter === "completed" ? style.activeFilter : ""}>Completed
                 </button>
             </div>
         </div>

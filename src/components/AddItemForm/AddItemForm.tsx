@@ -3,16 +3,17 @@ import style from "../TodolistsList/Todolist/Todolist.module.css";
 
 export type AddItemFormTypes = {
     addItem: (title: string) => void;
+    disabled?: boolean
 }
 
-export const AddItemForm = React.memo((props: AddItemFormTypes) => {
+export const AddItemForm = React.memo(({addItem, disabled = false}: AddItemFormTypes) => {
 
     const [title, setTitle] = useState("");
     const [error, setError] = useState("")
 
     const onClickAddItem = () => {
         if (title.trim()) {
-            props.addItem(title);
+            addItem(title);
             setTitle("");
         } else {
             setError("invalid title")
@@ -36,8 +37,9 @@ export const AddItemForm = React.memo((props: AddItemFormTypes) => {
                 onChange={onChangeHandler}
                 onKeyPress={onKeyPressHandler}
                 className={error ? style.error : ""}
+                disabled={disabled}
             />
-            <button onClick={onClickAddItem}>+</button>
+            <button onClick={onClickAddItem} disabled={disabled}>+</button>
             {error && <div className={style.errorMessage}>{error}</div>}
         </div>
     )

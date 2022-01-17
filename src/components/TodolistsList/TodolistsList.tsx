@@ -68,14 +68,12 @@ export const TodolistsList = () => {
                 return (
                     <Todolist
                         key={todolist.id}
-                        todolistId={todolist.id}
-                        todolistTitle={todolist.title}
+                        todolist={todolist}
                         tasks={todolistsTasks}
                         removeTask={removeTask}
                         addTask={addTask}
                         changeTaskStatus={changeTaskStatus}
                         statusFilter={statusFilter}
-                        tasksFilter={todolist.filter}
                         removeTodolist={removeTodolist}
                         changeTaskTitle={changeTaskTitle}
                         changeTodolistTitle={changeTodolistTitle}

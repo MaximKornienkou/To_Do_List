@@ -1,0 +1,15 @@
+.error {
+    position: absolute;
+    bottom: 10%;
+    left: 20%;
+    cursor: default;
+    padding: 0 20px;
+    word-wrap: break-word;
+    text-align: center;
+    line-height: 40px;
+    border-radius: 10px;
+    color: white;
+    background-color: red;
+    transition: .5s ease-in-out;
+    min-height: 45px;
+}

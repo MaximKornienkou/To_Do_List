@@ -1,7 +1,7 @@
 import {AddTodolistType, RemoveTodolistType, SetTodolistType} from "./todolists-reducer";
 import {TaskPriority, TaskStatus, TaskType, todolistAPI, UpdateTaskModelType} from "../api/todolistAPI";
 import {AppRootStateType, AppThunk} from "../state/store";
-import {setAppLoading} from "./app-reducer";
+import {setAppLoading, setError} from "./app-reducer";
 
 const initialState: TasksStateType = {}
 
@@ -37,13 +37,14 @@ export const tasksReducer = (state = initialState, action: TaskActionTypes): Tas
 
 // thunks
 export const setTasks = (todolistId: string): AppThunk => async dispatch => {
+    dispatch(setAppLoading("loading"));
     try {
         const result = await todolistAPI.getTasks(todolistId);
         dispatch(setTasksAC(todolistId, result.data.items));
     } catch (error) {
 
     } finally {
-
+        dispatch(setAppLoading("succeeded"));
     }
 }
 
@@ -59,10 +60,21 @@ export const deleteTask = (todolistId: string, taskId: string): AppThunk => asyn
 }
 
 export const createTask = (todoListId: string, title: string): AppThunk => async dispatch => {
-    dispatch(setAppLoading("idle"));
+    dispatch(setAppLoading("loading"));
     try {
         const result = await todolistAPI.createTask({todoListId, title});
-        dispatch(addTaskAC(result.data.data.item));
+        if (result.data.resultCode === 0) {
+            dispatch(addTaskAC(result.data.data.item));
+            //dispatch(setError(""));
+        } else {
+            if (result.data.messages.length) {
+                dispatch(setError(result.data.messages[0]));
+            } else {
+                dispatch(setError("the server is not responding"));
+            }
+        }
+    } catch (error) {
+        dispatch(setError("the server is not responding"));
     } finally {
         dispatch(setAppLoading("succeeded"));
     }
