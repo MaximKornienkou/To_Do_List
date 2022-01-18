@@ -9,7 +9,7 @@
     line-height: 40px;
     border-radius: 10px;
     color: white;
-    background-color: red;
+    background-color: rgb(211, 47, 47);
     transition: .5s ease-in-out;
     min-height: 45px;
 }

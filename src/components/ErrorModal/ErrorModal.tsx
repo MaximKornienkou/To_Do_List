@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import styles from './ErrorModal.module.css';
 import {useDispatch} from "react-redux";
-import {setError} from "../../reducers/app-reducer";
+import {setAppError} from "../../reducers/app-reducer";
 
 type PropsType = {
     text: string | null
@@ -19,7 +19,7 @@ export const ErrorModal = ({text}: PropsType) => {
         }
         setTimeout(() => {
             setOpacity('0');
-            dispatch(setError(""));
+            dispatch(setAppError(""));
         }, 3000);
     }, [text, dispatch]);
 

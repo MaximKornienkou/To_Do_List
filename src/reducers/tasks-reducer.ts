@@ -1,20 +1,24 @@
 import {AddTodolistType, RemoveTodolistType, SetTodolistType} from "./todolists-reducer";
 import {TaskPriority, TaskStatus, TaskType, todolistAPI, UpdateTaskModelType} from "../api/todolistAPI";
 import {AppRootStateType, AppThunk} from "../state/store";
-import {setAppLoading, setError} from "./app-reducer";
+import {setAppLoading, setAppError} from "./app-reducer";
 
 const initialState: TasksStateType = {}
 
 export const tasksReducer = (state = initialState, action: TaskActionTypes): TasksStateType => {
     switch (action.type) {
         case "REMOVE-TASK":
-            return {...state, [action.todolistId]: state[action.todolistId]
-                    .filter((task) => task.id !== action.taskId)}
+            return {
+                ...state, [action.todolistId]: state[action.todolistId]
+                    .filter((task) => task.id !== action.taskId)
+            }
         case "ADD-TASK":
             return {...state, [action.task.todoListId]: [action.task, ...state[action.task.todoListId]]}
         case "UPDATE-TASK":
-            return {...state, [action.todolistId]: state[action.todolistId]
-                    .map((task) => task.id === action.taskId ? {...task, ...action.model} : task)}
+            return {
+                ...state, [action.todolistId]: state[action.todolistId]
+                    .map((task) => task.id === action.taskId ? {...task, ...action.model} : task)
+            }
         case "ADD-TODOLIST":
             return {...state, [action.todolist.id]: []}
         case "REMOVE-TODOLIST":
@@ -65,16 +69,15 @@ export const createTask = (todoListId: string, title: string): AppThunk => async
         const result = await todolistAPI.createTask({todoListId, title});
         if (result.data.resultCode === 0) {
             dispatch(addTaskAC(result.data.data.item));
-            //dispatch(setError(""));
         } else {
             if (result.data.messages.length) {
-                dispatch(setError(result.data.messages[0]));
+                dispatch(setAppError(result.data.messages[0]));
             } else {
-                dispatch(setError("the server is not responding"));
+                dispatch(setAppError("Network error"));
             }
         }
     } catch (error) {
-        dispatch(setError("the server is not responding"));
+        dispatch(setAppError("Network error"));
     } finally {
         dispatch(setAppLoading("succeeded"));
     }
@@ -89,7 +92,6 @@ export const updateTask = (todolistId: string, taskId: string, domainModel: Upda
             throw new Error("task not found");
         }
 
-        console.log(task)
         const apiModel: UpdateTaskModelType = {
             deadline: task.deadline,
             description: task.description,
@@ -99,16 +101,22 @@ export const updateTask = (todolistId: string, taskId: string, domainModel: Upda
             status: task.status,
             ...domainModel
         }
-        console.log(apiModel)
+        dispatch(setAppLoading("loading"));
         try {
-            console.log(1)
             const result = await todolistAPI.updateTask(todolistId, taskId, apiModel);
-            console.log(result)
-            dispatch(updateTaskAC(todolistId, taskId, domainModel));
+            if (result.data.resultCode === 0) {
+                dispatch(updateTaskAC(todolistId, taskId, domainModel));
+            } else {
+                if (result.data.messages.length) {
+                    dispatch(setAppError(result.data.messages[0]));
+                } else {
+                    dispatch(setAppError("Network error"));
+                }
+            }
         } catch (error) {
-
+            dispatch(setAppError("Network error"));
         } finally {
-
+            dispatch(setAppLoading("succeeded"));
         }
     }
 

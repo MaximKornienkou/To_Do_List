@@ -1,4 +1,4 @@
-import {appReducer, InitialStateType, setAppLoading, setError} from "./app-reducer";
+import {appReducer, InitialStateType, setAppLoading, setAppError} from "./app-reducer";
 
 let startState: InitialStateType
 
@@ -18,7 +18,7 @@ test("status should be equal false", () => {
 });
 test("error should be equal error", () => {
 
-    const endState = appReducer(startState, setError("error"));
+    const endState = appReducer(startState, setAppError("error"));
 
     expect(endState.error).toBe("error");
 });
