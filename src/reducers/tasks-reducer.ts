@@ -1,7 +1,9 @@
 import {AddTodolistType, RemoveTodolistType, SetTodolistType} from "./todolists-reducer";
 import {TaskPriority, TaskStatus, TaskType, todolistAPI, UpdateTaskModelType} from "../api/todolistAPI";
 import {AppRootStateType, AppThunk} from "../state/store";
-import {setAppLoading, setAppError} from "./app-reducer";
+import {setAppLoading} from "./app-reducer";
+import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
+
 
 const initialState: TasksStateType = {}
 
@@ -70,14 +72,10 @@ export const createTask = (todoListId: string, title: string): AppThunk => async
         if (result.data.resultCode === 0) {
             dispatch(addTaskAC(result.data.data.item));
         } else {
-            if (result.data.messages.length) {
-                dispatch(setAppError(result.data.messages[0]));
-            } else {
-                dispatch(setAppError("Network error"));
-            }
+            handleServerAppError(result.data, dispatch);
         }
     } catch (error) {
-        dispatch(setAppError("Network error"));
+        handleServerNetworkError(error, dispatch);
     } finally {
         dispatch(setAppLoading("succeeded"));
     }
@@ -107,14 +105,10 @@ export const updateTask = (todolistId: string, taskId: string, domainModel: Upda
             if (result.data.resultCode === 0) {
                 dispatch(updateTaskAC(todolistId, taskId, domainModel));
             } else {
-                if (result.data.messages.length) {
-                    dispatch(setAppError(result.data.messages[0]));
-                } else {
-                    dispatch(setAppError("Network error"));
-                }
+                handleServerAppError(result.data, dispatch);
             }
         } catch (error) {
-            dispatch(setAppError("Network error"));
+            handleServerNetworkError(error, dispatch);
         } finally {
             dispatch(setAppLoading("succeeded"));
         }
