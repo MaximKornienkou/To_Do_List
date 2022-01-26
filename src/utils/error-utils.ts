@@ -12,10 +12,10 @@ export const handleServerAppError = <D>(data: ResponseType<D>, dispatch: Dispatc
     }
 }
 
-export const handleServerNetworkError = (error: any, dispatch: Dispatch<AppStatusActionTypes>) => {
+export const handleServerNetworkError = (error: string, dispatch: Dispatch<AppStatusActionTypes>) => {
 
     if (axios.isAxiosError(error) && error.message) {
-        dispatch(setAppError(error.message))
+        dispatch(setAppError(error.message));
     } else {
         dispatch(setAppError("Network error"));
     }

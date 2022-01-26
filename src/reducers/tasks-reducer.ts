@@ -3,6 +3,7 @@ import {TaskPriority, TaskStatus, TaskType, todolistAPI, UpdateTaskModelType} fr
 import {AppRootStateType, AppThunk} from "../state/store";
 import {setAppLoading} from "./app-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
+import axios from "axios";
 
 
 const initialState: TasksStateType = {}
@@ -75,7 +76,9 @@ export const createTask = (todoListId: string, title: string): AppThunk => async
             handleServerAppError(result.data, dispatch);
         }
     } catch (error) {
-        handleServerNetworkError(error, dispatch);
+        if (axios.isAxiosError(error)) {
+            handleServerNetworkError(error.message, dispatch);
+        }
     } finally {
         dispatch(setAppLoading("succeeded"));
     }
@@ -108,7 +111,9 @@ export const updateTask = (todolistId: string, taskId: string, domainModel: Upda
                 handleServerAppError(result.data, dispatch);
             }
         } catch (error) {
-            handleServerNetworkError(error, dispatch);
+            if (axios.isAxiosError(error)) {
+                handleServerNetworkError(error.message, dispatch);
+            }
         } finally {
             dispatch(setAppLoading("succeeded"));
         }
