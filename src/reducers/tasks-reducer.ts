@@ -90,7 +90,7 @@ export const updateTask = (todolistId: string, taskId: string, domainModel: Upda
         const task = getState().tasks[todolistId].find((task) => task.id === taskId);
 
         if (!task) {
-            throw new Error("task not found");
+            throw new Error("sorry task not found");
         }
 
         const apiModel: UpdateTaskModelType = {
